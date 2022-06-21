@@ -1,0 +1,22 @@
+# Object files
+*.o
+*.obj
+
+# Libraries
+*.lib
+*.a
+
+# Executables
+*.exe
+*.out
+server
+client
+
+# LLDB
+*.dSYM
+
+# Header
+*.gch
+
+# Swap
+*.swp
