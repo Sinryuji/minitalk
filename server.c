@@ -1,4 +1,5 @@
 /* ************************************************************************** */
+
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
@@ -11,39 +12,66 @@
 /* ************************************************************************** */
 
 #include "minitalk.h"
+#include "ft_printf/ft_printf.h"
+#include "ft_printf/libft/libft.h"
+#include <unistd.h>
 
-t_data g_data;
+t_server_data g_data;
 
-void	action(int sig)
+void	print_message(int sig)
 {
-	if (g_data.cnt++ < 8)
+	static char c = 0;
+	static int	i = 0;
+	static int	len = 0;
+	c <<= 1;
+	if (sig == SIGUSR2)
+		c |= 1;
+	i++;
+	if (i == 8)
 	{
-		g_data.c <<= 1;
-		if (sig == SIGUSR2)
-			g_data.c |= 1;
+		g_data.msg[len] = c;
+		c = 0;
+		i = 0;
+		len++;
 	}
-	else
+	if (g_data.len == len)
 	{
-		write(1, &g_data.c, 1);
-		g_data.c = 0;
-		g_data.cnt = 0;
+		g_data.msg[len] = '\0';
+		ft_putstr_fd(g_data.msg, 1);
+		len = 0;
+		g_data.len = 0;
+		free(g_data.msg);
+		g_data.action.sa_handler = receive_message_length;	
+		sigaction(SIGUSR1, &g_data.action, NULL);
+		sigaction(SIGUSR2, &g_data.action, NULL);
 	}
 }
 
-int	catch_signal(int sig, void (*handler)(int))
+void	receive_message_length(int sig)
 {
-	struct sigaction action;
-	action.sa_handler = handler;
-	sigemptyset(&action.sa_mask);
-	action.sa_flags = 0;
-	return (sigaction(sig, &action, NULL));
+	static int	i = 0;
+	g_data.len <<= 1;
+	if (sig == SIGUSR2)
+		g_data.len |= 1;
+	i++;
+	if (i == 32)
+	{
+		i = 0;
+		g_data.msg = ft_calloc((g_data.len + 1), sizeof(char));
+		g_data.action.sa_handler = print_message;
+		sigaction(SIGUSR1, &g_data.action, NULL);
+		sigaction(SIGUSR2, &g_data.action, NULL);
+	}
 }
 
 int	main()
 {
 	ft_printf("Server PID : %d\n", getpid());
-	catch_signal(SIGUSR1, action);
-	catch_signal(SIGUSR2, action);
+	g_data.action.sa_handler = receive_message_length;
+	sigemptyset(&g_data.action.sa_mask);
+	g_data.action.sa_flags = 0;
+	sigaction(SIGUSR1, &g_data.action, NULL);
+	sigaction(SIGUSR2, &g_data.action, NULL);
 	while (1)
 		pause();
 	return (0);
