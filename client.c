@@ -6,7 +6,7 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 18:50:57 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/12 18:35:46 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/12 19:31:05 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 void	send_message_length(pid_t pid, unsigned int len)
 {
-	int	i;
+	int				i;
 	unsigned int	tmp;
 
 	i = 0;
@@ -35,8 +35,8 @@ void	send_message_length(pid_t pid, unsigned int len)
 
 void	send_message(pid_t pid, char *str)
 {
-	int	i;
-	int	j;
+	int				i;
+	int				j;
 	unsigned char	c;
 	unsigned char	tmp;
 
@@ -65,7 +65,8 @@ int	main(int argc, char **argv)
 	pid_t				pid;
 
 	if (argc != 3)
-		ft_puterr("Invalid number of factors.\nUsage: ./client [Server PID] [Message]");
+		ft_puterr("Invalid number of factors.\n\
+Usage: ./client [Server PID] [Message]");
 	pid = (pid_t)ft_atoi(argv[1]);
 	if (pid < 101 || pid > 99998)
 		ft_puterr("Invalid PID");

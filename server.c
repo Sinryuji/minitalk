@@ -1,5 +1,16 @@
 /* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   server.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/12 19:31:10 by hyeongki          #+#    #+#             */
+/*   Updated: 2022/07/12 19:42:27 by hyeongki         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
@@ -16,13 +27,21 @@
 #include "ft_printf/libft/libft.h"
 #include <unistd.h>
 
-t_server_data g_data;
+t_server_data	g_data;
+
+static void	set_sa_handler(void (*handler)(int))
+{
+	g_data.action.sa_handler = handler;
+	sigaction(SIGUSR1, &g_data.action, NULL);
+	sigaction(SIGUSR2, &g_data.action, NULL);
+}
 
 void	print_message(int sig)
 {
-	static char c = 0;
+	static char	c = 0;
 	static int	i = 0;
 	static int	len = 0;
+
 	c <<= 1;
 	if (sig == SIGUSR2)
 		c |= 1;
@@ -41,15 +60,14 @@ void	print_message(int sig)
 		len = 0;
 		g_data.len = 0;
 		free(g_data.msg);
-		g_data.action.sa_handler = receive_message_length;	
-		sigaction(SIGUSR1, &g_data.action, NULL);
-		sigaction(SIGUSR2, &g_data.action, NULL);
+		set_sa_handler(receive_message_length);
 	}
 }
 
 void	receive_message_length(int sig)
 {
 	static int	i = 0;
+
 	g_data.len <<= 1;
 	if (sig == SIGUSR2)
 		g_data.len |= 1;
@@ -58,13 +76,11 @@ void	receive_message_length(int sig)
 	{
 		i = 0;
 		g_data.msg = ft_calloc((g_data.len + 1), sizeof(char));
-		g_data.action.sa_handler = print_message;
-		sigaction(SIGUSR1, &g_data.action, NULL);
-		sigaction(SIGUSR2, &g_data.action, NULL);
+		set_sa_handler(print_message);
 	}
 }
 
-int	main()
+int	main(void)
 {
 	ft_printf("Server PID : %d\n", getpid());
 	g_data.action.sa_handler = receive_message_length;
