@@ -6,7 +6,7 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 18:50:57 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/06 20:03:06 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/12 18:35:46 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,10 @@ int	main(int argc, char **argv)
 	pid_t				pid;
 
 	if (argc != 3)
-		exit(1);
+		ft_puterr("Invalid number of factors.\nUsage: ./client [Server PID] [Message]");
 	pid = (pid_t)ft_atoi(argv[1]);
+	if (pid < 101 || pid > 99998)
+		ft_puterr("Invalid PID");
 	send_message_length(pid, ft_strlen(argv[2]));
 	usleep(100);
 	send_message(pid, argv[2]);
