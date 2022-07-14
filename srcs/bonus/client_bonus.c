@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 18:50:57 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/12 19:31:05 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/14 19:20:10 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk.h"
-#include "ft_printf/libft/libft.h"
+#include "minitalk_bonus.h"
+#include "../../ft_printf/libft/libft.h"
 #include <unistd.h>
 
 void	send_message_length(pid_t pid, unsigned int len)

@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.c                                           :+:      :+:    :+:   */
+/*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/12 19:31:10 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/12 20:01:53 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/14 18:40:27 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk.h"
-#include "ft_printf/ft_printf.h"
-#include "ft_printf/libft/libft.h"
+#include "minitalk_bonus.h"
+#include "../../ft_printf/ft_printf.h"
+#include "../../ft_printf/libft/libft.h"
 #include <unistd.h>
 
 t_server_data	g_data;
@@ -70,6 +70,7 @@ void	receive_message_length(int sig)
 
 int	main(void)
 {
+	ft_printf("this is bonus!!\n");
 	ft_printf("Server PID : %d\n", getpid());
 	g_data.action.sa_handler = receive_message_length;
 	sigemptyset(&g_data.action.sa_mask);
