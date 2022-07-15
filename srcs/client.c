@@ -6,7 +6,7 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 18:50:57 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/14 18:33:41 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/15 17:23:24 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../ft_printf/libft/libft.h"
 #include <unistd.h>
 
-void	send_message_length(pid_t pid, unsigned int len)
+static void	send_message_length(pid_t pid, unsigned int len)
 {
 	int				i;
 	unsigned int	tmp;
@@ -29,11 +29,11 @@ void	send_message_length(pid_t pid, unsigned int len)
 		else
 			kill(pid, SIGUSR2);
 		tmp = len;
-		usleep(100);
+		usleep(50);
 	}
 }
 
-void	send_message(pid_t pid, char *str)
+static void	send_message(pid_t pid, char *str)
 {
 	int				i;
 	int				j;
@@ -54,7 +54,7 @@ void	send_message(pid_t pid, char *str)
 			else
 				kill(pid, SIGUSR2);
 			tmp = c;
-			usleep(100);
+			usleep(50);
 		}
 		i++;
 	}

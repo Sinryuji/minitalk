@@ -6,7 +6,7 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/12 19:31:10 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/14 18:33:44 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/15 17:22:26 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,6 @@
 #include <unistd.h>
 
 t_server_data	g_data;
-
-static void	set_sa_handler(void (*handler)(int))
-{
-	g_data.action.sa_handler = handler;
-	sigaction(SIGUSR1, &g_data.action, NULL);
-	sigaction(SIGUSR2, &g_data.action, NULL);
-}
 
 void	print_message(int sig)
 {
@@ -48,7 +41,8 @@ void	print_message(int sig)
 		len = 0;
 		g_data.len = 0;
 		free(g_data.msg);
-		set_sa_handler(receive_message_length);
+		signal(SIGUSR1, receive_message_length);
+		signal(SIGUSR2, receive_message_length);
 	}
 }
 
@@ -64,18 +58,16 @@ void	receive_message_length(int sig)
 	{
 		i = 0;
 		g_data.msg = ft_calloc((g_data.len + 1), sizeof(char));
-		set_sa_handler(print_message);
+		signal(SIGUSR1, print_message);
+		signal(SIGUSR2, print_message);
 	}
 }
 
 int	main(void)
 {
 	ft_printf("Server PID : %d\n", getpid());
-	g_data.action.sa_handler = receive_message_length;
-	sigemptyset(&g_data.action.sa_mask);
-	g_data.action.sa_flags = 0;
-	sigaction(SIGUSR1, &g_data.action, NULL);
-	sigaction(SIGUSR2, &g_data.action, NULL);
+	signal(SIGUSR1, receive_message_length);
+	signal(SIGUSR2, receive_message_length);
 	while (1)
 		pause();
 	return (0);

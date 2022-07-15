@@ -6,7 +6,7 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 18:51:17 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/12 19:37:35 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/15 17:24:39 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 
 typedef struct s_server_data
 {
-	struct sigaction	action;		
 	int					len;
 	char				*msg;
 

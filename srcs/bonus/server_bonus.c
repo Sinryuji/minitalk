@@ -6,7 +6,7 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/12 19:31:10 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/14 18:40:27 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/14 20:29:25 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ void	receive_message_length(int sig)
 
 int	main(void)
 {
-	ft_printf("this is bonus!!\n");
 	ft_printf("Server PID : %d\n", getpid());
 	g_data.action.sa_handler = receive_message_length;
 	sigemptyset(&g_data.action.sa_mask);
