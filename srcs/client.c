@@ -6,7 +6,7 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 18:50:57 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/15 17:23:24 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/15 17:49:24 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ Usage: ./client [Server PID] [Message]");
 	if (pid < 101 || pid > 99998)
 		ft_puterr("Invalid PID");
 	send_message_length(pid, ft_strlen(argv[2]));
-	usleep(100);
 	send_message(pid, argv[2]);
 	return (0);
 }

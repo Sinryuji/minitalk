@@ -6,7 +6,7 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 18:51:17 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/14 20:16:27 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/15 18:04:06 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ typedef struct s_server_data
 }	t_server_data;
 
 /* server.c */
-void	receive_message_length(int sig);
-void	print_message(int sig);
+void	receive_message_length(int sig, siginfo_t *info, void *context);
+void	print_message(int sig, siginfo_t *info, void *context);
 
 #endif

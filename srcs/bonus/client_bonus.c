@@ -6,7 +6,7 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 18:50:57 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/14 19:20:10 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/15 20:10:09 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,15 @@
 #include "../../ft_printf/libft/libft.h"
 #include <unistd.h>
 
-void	send_message_length(pid_t pid, unsigned int len)
+static void	receive_reply(int sig)
+{
+	if (sig == SIGUSR1)
+		return ;
+	else if (sig == SIGUSR2)
+		ft_puterr("Signal send failed");
+}
+
+static void	send_message_length(pid_t pid, unsigned int len)
 {
 	int				i;
 	unsigned int	tmp;
@@ -28,12 +36,12 @@ void	send_message_length(pid_t pid, unsigned int len)
 			kill(pid, SIGUSR1);
 		else
 			kill(pid, SIGUSR2);
+		pause();
 		tmp = len;
-		usleep(100);
 	}
 }
 
-void	send_message(pid_t pid, char *str)
+static void	send_message(pid_t pid, char *str)
 {
 	int				i;
 	int				j;
@@ -53,8 +61,8 @@ void	send_message(pid_t pid, char *str)
 				kill(pid, SIGUSR1);
 			else
 				kill(pid, SIGUSR2);
+			pause();
 			tmp = c;
-			usleep(100);
 		}
 		i++;
 	}
@@ -70,8 +78,9 @@ Usage: ./client [Server PID] [Message]");
 	pid = (pid_t)ft_atoi(argv[1]);
 	if (pid < 101 || pid > 99998)
 		ft_puterr("Invalid PID");
+	signal(SIGUSR1, receive_reply);
+	signal(SIGUSR2, receive_reply);
 	send_message_length(pid, ft_strlen(argv[2]));
-	usleep(100);
 	send_message(pid, argv[2]);
 	return (0);
 }
