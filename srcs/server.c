@@ -6,7 +6,7 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/12 19:31:10 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/15 17:22:26 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/18 20:06:36 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 t_server_data	g_data;
 
-void	print_message(int sig)
+void	receive_message(int sig)
 {
 	static char	c = 0;
 	static int	i = 0;
@@ -37,7 +37,7 @@ void	print_message(int sig)
 	if (g_data.len == len)
 	{
 		g_data.msg[len] = '\0';
-		ft_putstr_fd(g_data.msg, 1);
+		ft_printf("%s", g_data.msg);
 		len = 0;
 		g_data.len = 0;
 		free(g_data.msg);
@@ -58,8 +58,8 @@ void	receive_message_length(int sig)
 	{
 		i = 0;
 		g_data.msg = ft_calloc((g_data.len + 1), sizeof(char));
-		signal(SIGUSR1, print_message);
-		signal(SIGUSR2, print_message);
+		signal(SIGUSR1, receive_message);
+		signal(SIGUSR2, receive_message);
 	}
 }
 

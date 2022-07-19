@@ -6,7 +6,7 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/12 19:31:10 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/15 20:01:32 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/19 20:47:02 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,18 @@ static void	set_sa_handler(void (*handler)(int, siginfo_t *, void *))
 	sigaction(SIGUSR2, &g_data.action, NULL);
 }
 
-void	print_message(int sig, siginfo_t *info, void *context)
+static void	print_message(int *len)
+{
+	g_data.msg[*len] = '\0';
+	ft_putstr_fd(g_data.msg, 1);
+	*len = 0;
+	g_data.len = 0;
+	free(g_data.msg);
+	g_data.msg = NULL;
+	set_sa_handler(receive_message_length);
+}
+
+void	receive_message(int sig, siginfo_t *info, void *context)
 {
 	static char	c = 0;
 	static int	i = 0;
@@ -37,21 +48,14 @@ void	print_message(int sig, siginfo_t *info, void *context)
 	i++;
 	if (i == 8)
 	{
-		g_data.msg[len] = c;
+		g_data.msg[len++] = c;
 		c = 0;
 		i = 0;
-		len++;
 	}
 	if (g_data.len == len)
-	{
-		g_data.msg[len] = '\0';
-		ft_putstr_fd(g_data.msg, 1);
-		len = 0;
-		g_data.len = 0;
-		free(g_data.msg);
-		set_sa_handler(receive_message_length);
-	}
-	kill(info->si_pid, SIGUSR1);
+		print_message(&len);
+	usleep(50);
+	kill(info->si_pid, sig);
 }
 
 void	receive_message_length(int sig, siginfo_t *info, void *context)
@@ -67,9 +71,10 @@ void	receive_message_length(int sig, siginfo_t *info, void *context)
 	{
 		i = 0;
 		g_data.msg = ft_calloc((g_data.len + 1), sizeof(char));
-		set_sa_handler(print_message);
+		set_sa_handler(receive_message);
 	}
-	kill(info->si_pid, SIGUSR1);
+	usleep(50);
+	kill(info->si_pid, sig);
 }
 
 int	main(void)
@@ -81,6 +86,8 @@ int	main(void)
 	sigaction(SIGUSR1, &g_data.action, NULL);
 	sigaction(SIGUSR2, &g_data.action, NULL);
 	while (1)
+	{
 		pause();
+	}
 	return (0);
 }

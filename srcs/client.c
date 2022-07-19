@@ -6,13 +6,14 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 18:50:57 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/15 17:49:24 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/18 20:37:57 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 #include "../ft_printf/libft/libft.h"
 #include <unistd.h>
+#include "colors.h"
 
 static void	send_message_length(pid_t pid, unsigned int len)
 {
@@ -65,11 +66,11 @@ int	main(int argc, char **argv)
 	pid_t				pid;
 
 	if (argc != 3)
-		ft_puterr("Invalid number of factors.\n\
-Usage: ./client [Server PID] [Message]");
+		ft_puterr(RED "Invalid number of factors.\n" RESET \
+GREEN "Usage: ./client [Server PID] [Message]\n" RESET);
 	pid = (pid_t)ft_atoi(argv[1]);
 	if (pid < 101 || pid > 99998)
-		ft_puterr("Invalid PID");
+		ft_puterr(RED "Invalid PID\n" RESET);
 	send_message_length(pid, ft_strlen(argv[2]));
 	send_message(pid, argv[2]);
 	return (0);
