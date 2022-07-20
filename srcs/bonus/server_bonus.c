@@ -6,7 +6,7 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/12 19:31:10 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/20 20:01:39 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/21 00:25:25 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ static void	receive_connection_check(int sig, siginfo_t *info, void *context)
 	}
 }
 
-static void	print_message(int *len)
+static void	print_message(int *len, pid_t pid)
 {
 	g_data.msg[*len] = '\0';
-	ft_putstr_fd(g_data.msg, 1);
+	ft_printf("client[%d] : %s\n", pid, g_data.msg);
 	*len = 0;
 	g_data.len = 0;
 	free(g_data.msg);
@@ -65,7 +65,7 @@ static void	receive_message(int sig, siginfo_t *info, void *context)
 		i = 0;
 	}
 	if (g_data.len == len)
-		print_message(&len);
+		print_message(&len, info->si_pid);
 	usleep(50);
 	kill(info->si_pid, sig);
 }

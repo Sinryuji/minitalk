@@ -6,7 +6,7 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/12 19:31:10 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/20 19:59:29 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/21 00:22:28 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ static void	receive_connection_check(int sig, siginfo_t *info, void *context)
 		kill(info->si_pid, SIGUSR2);
 	}
 }
-
-static void	print_message(int *len)
+#include <stdio.h>
+static void	print_message(int *len, pid_t pid)
 {
 	g_data.msg[*len] = '\0';
-	ft_printf("%s", g_data.msg);
+	ft_printf("client[%d] : %s\n", pid, g_data.msg);
 	*len = 0;
 	g_data.len = 0;
 	free(g_data.msg);
@@ -53,7 +53,6 @@ static void	receive_message(int sig, siginfo_t *info, void *context)
 	static int	i = 0;
 	static int	len = 0;
 
-	(void)info;
 	(void)context;
 	c <<= 1;
 	if (sig == SIGUSR2)
@@ -67,7 +66,7 @@ static void	receive_message(int sig, siginfo_t *info, void *context)
 		len++;
 	}
 	if (g_data.len == len)
-		print_message(&len);
+		print_message(&len, info->si_pid);
 }
 
 void	receive_message_length(int sig, siginfo_t *info, void *context)
