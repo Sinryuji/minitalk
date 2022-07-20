@@ -6,7 +6,7 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/12 19:31:10 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/20 19:43:48 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/20 20:01:39 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	print_message(int *len)
 	sigaction(SIGUSR2, &g_data.action, NULL);
 }
 
-void	receive_message(int sig, siginfo_t *info, void *context)
+static void	receive_message(int sig, siginfo_t *info, void *context)
 {
 	static char	c = 0;
 	static int	i = 0;
