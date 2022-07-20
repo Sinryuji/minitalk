@@ -6,7 +6,7 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 18:50:57 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/20 17:29:52 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/20 19:18:21 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	receive_reply(int sig)
 	g_signal = 0;
 }
 
-static void	send_message_length(pid_t pid, unsigned int len)
+static void	send_message_length(pid_t pid, int len)
 {
 	int				i;
 

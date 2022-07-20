@@ -6,21 +6,55 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/12 19:31:10 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/20 17:27:48 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/20 19:35:10 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-#include "../ft_printf/ft_printf.h"
 
 t_server_data	g_data;
 
-void	receive_message(int sig)
+static void	receive_connection_check(int sig, siginfo_t *info, void *context)
+{
+	(void)context;
+	if (g_data.connection_flag == 0 && sig == SIGUSR1)
+	{
+		g_data.action.sa_sigaction = receive_message_length;
+		sigaction(SIGUSR1, &g_data.action, NULL);
+		sigaction(SIGUSR2, &g_data.action, NULL);
+		g_data.connection_flag = 1;
+		usleep(50);
+		kill(info->si_pid, SIGUSR1);
+	}
+	else
+	{
+		usleep(50);
+		kill(info->si_pid, SIGUSR2);
+	}
+}
+
+static void	print_message(int *len)
+{
+	g_data.msg[*len] = '\0';
+	ft_printf("%s", g_data.msg);
+	*len = 0;
+	g_data.len = 0;
+	free(g_data.msg);
+	g_data.msg = NULL;
+	g_data.connection_flag = 0;
+	g_data.action.sa_sigaction = receive_connection_check;
+	sigaction(SIGUSR1, &g_data.action, NULL);
+	sigaction(SIGUSR2, &g_data.action, NULL);
+}
+
+void	receive_message(int sig, siginfo_t *info, void *context)
 {
 	static char	c = 0;
 	static int	i = 0;
 	static int	len = 0;
 
+	(void)info;
+	(void)context;
 	c <<= 1;
 	if (sig == SIGUSR2)
 		c |= 1;
@@ -33,21 +67,15 @@ void	receive_message(int sig)
 		len++;
 	}
 	if (g_data.len == len)
-	{
-		g_data.msg[len] = '\0';
-		ft_printf("%s", g_data.msg);
-		len = 0;
-		g_data.len = 0;
-		free(g_data.msg);
-		signal(SIGUSR1, receive_message_length);
-		signal(SIGUSR2, receive_message_length);
-	}
+		print_message(&len);
 }
 
-void	receive_message_length(int sig)
+void	receive_message_length(int sig, siginfo_t *info, void *context)
 {
 	static int	i = 0;
 
+	(void)info;
+	(void)context;
 	g_data.len <<= 1;
 	if (sig == SIGUSR2)
 		g_data.len |= 1;
@@ -56,16 +84,20 @@ void	receive_message_length(int sig)
 	{
 		i = 0;
 		g_data.msg = ft_calloc((g_data.len + 1), sizeof(char));
-		signal(SIGUSR1, receive_message);
-		signal(SIGUSR2, receive_message);
+		g_data.action.sa_sigaction = receive_message;
+		sigaction(SIGUSR1, &g_data.action, NULL);
+		sigaction(SIGUSR2, &g_data.action, NULL);
 	}
 }
 
 int	main(void)
 {
 	ft_printf("Server PID : %d\n", getpid());
-	signal(SIGUSR1, receive_message_length);
-	signal(SIGUSR2, receive_message_length);
+	g_data.action.sa_flags = SA_SIGINFO;
+	g_data.action.sa_sigaction = receive_connection_check;
+	sigemptyset(&g_data.action.sa_mask);
+	sigaction(SIGUSR1, &g_data.action, NULL);
+	sigaction(SIGUSR2, &g_data.action, NULL);
 	while (1)
 		pause();
 	return (0);

@@ -6,28 +6,55 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 18:50:57 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/20 17:28:08 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/20 19:30:44 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 #include "colors.h"
 
-static void	send_message_length(pid_t pid, unsigned int len)
+static void	receive_connection_reply(int sig)
+{
+	if (sig == SIGUSR1)
+		return ;
+	if (sig == SIGUSR2)
+		ft_puterr(RED "Connection to server failed, \
+The server might be connecting with another client\n");
+}
+
+static void	send_connection_check(pid_t pid)
+{
+	int	cnt;
+	int	sleep_time;
+
+	cnt = 0;
+	while (cnt < 10)
+	{
+		kill(pid, SIGUSR1);
+		ft_printf("Connecting to server...\n");
+		sleep_time = sleep(1);
+		if (sleep_time != 0)
+		{
+			ft_printf(GREEN "Connection to server successful!\n");
+			return ;
+		}
+		cnt++;
+	}
+	if (cnt == 10)
+		ft_puterr(RED "Connection to server failed.\n");
+}
+
+static void	send_message_length(pid_t pid, int len)
 {
 	int				i;
-	unsigned int	tmp;
 
-	i = 0;
-	tmp = len;
-	while (i++ < 32)
+	i = 32;
+	while (i--)
 	{
-		len <<= 1;
-		if (len >= tmp)
-			kill(pid, SIGUSR1);
-		else
+		if (len >> i & 1)
 			kill(pid, SIGUSR2);
-		tmp = len;
+		else
+			kill(pid, SIGUSR1);
 		usleep(50);
 	}
 }
@@ -35,27 +62,20 @@ static void	send_message_length(pid_t pid, unsigned int len)
 static void	send_message(pid_t pid, char *str)
 {
 	int				i;
-	int				j;
 	unsigned char	c;
-	unsigned char	tmp;
 
-	i = 0;
-	while (str[i])
+	while (*str)
 	{
-		j = 0;
-		c = (unsigned char)str[i];
-		tmp = c;
-		while (j++ < 8)
+		i = 8;
+		c = (unsigned char)*str++;
+		while (i--)
 		{
-			c <<= 1;
-			if (c >= tmp)
-				kill(pid, SIGUSR1);
-			else
+			if (c >> i & 1)
 				kill(pid, SIGUSR2);
-			tmp = c;
+			else
+				kill(pid, SIGUSR1);
 			usleep(50);
 		}
-		i++;
 	}
 }
 
@@ -69,7 +89,11 @@ GREEN "Usage: ./client [Server PID] [Message]\n" RESET);
 	pid = (pid_t)ft_atoi(argv[1]);
 	if (pid < 101 || pid > 99998)
 		ft_puterr(RED "Invalid PID\n" RESET);
+	signal(SIGUSR1, receive_connection_reply);
+	signal(SIGUSR2, receive_connection_reply);
+	send_connection_check(pid);
 	send_message_length(pid, ft_strlen(argv[2]));
 	send_message(pid, argv[2]);
+	ft_printf(GREEN "Message send complete!\n" RESET);
 	return (0);
 }

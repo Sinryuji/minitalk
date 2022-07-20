@@ -6,20 +6,13 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/12 19:31:10 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/20 17:29:48 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/20 18:20:37 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk_bonus.h"
 
 t_server_data	g_data;
-
-static void	set_sa_handler(void (*handler)(int, siginfo_t *, void *))
-{
-	g_data.action.sa_sigaction = handler;
-	sigaction(SIGUSR1, &g_data.action, NULL);
-	sigaction(SIGUSR2, &g_data.action, NULL);
-}
 
 static void	print_message(int *len)
 {
@@ -29,7 +22,9 @@ static void	print_message(int *len)
 	g_data.len = 0;
 	free(g_data.msg);
 	g_data.msg = NULL;
-	set_sa_handler(receive_message_length);
+	g_data.action.sa_sigaction = receive_message_length;
+	sigaction(SIGUSR1, &g_data.action, NULL);
+	sigaction(SIGUSR2, &g_data.action, NULL);
 }
 
 void	receive_message(int sig, siginfo_t *info, void *context)
@@ -68,7 +63,9 @@ void	receive_message_length(int sig, siginfo_t *info, void *context)
 	{
 		i = 0;
 		g_data.msg = ft_calloc((g_data.len + 1), sizeof(char));
-		set_sa_handler(receive_message);
+		g_data.action.sa_sigaction = receive_message;
+		sigaction(SIGUSR1, &g_data.action, NULL);
+		sigaction(SIGUSR2, &g_data.action, NULL);
 	}
 	usleep(50);
 	kill(info->si_pid, sig);
