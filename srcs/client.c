@@ -6,7 +6,7 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 18:50:57 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/20 19:30:44 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/20 19:39:38 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void	send_connection_check(pid_t pid)
 
 static void	send_message_length(pid_t pid, int len)
 {
-	int				i;
+	int	i;
 
 	i = 32;
 	while (i--)
@@ -81,7 +81,7 @@ static void	send_message(pid_t pid, char *str)
 
 int	main(int argc, char **argv)
 {
-	pid_t				pid;
+	pid_t	pid;
 
 	if (argc != 3)
 		ft_puterr(RED "Invalid number of factors.\n" RESET \

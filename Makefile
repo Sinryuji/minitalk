@@ -6,7 +6,7 @@
 #    By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/21 18:12:33 by hyeongki          #+#    #+#              #
-#    Updated: 2022/07/14 20:11:38 by hyeongki         ###   ########.fr        #
+#    Updated: 2022/07/20 19:46:03 by hyeongki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ SERVER_OBJS = $(SERVER_SRCS:.c=.o)
 CLIENT_OBJS = $(CLIENT_SRCS:.c=.o)
 BONUS_PATH = $(SRCS_PATH)bonus/
 SERVER_BONUS_SRCS_NAME = server_bonus.c
-CLIENT_BONUS_SRCS_NAME = client_bonus.c
+CLIENT_BONUS_SRCS_NAME = client_bonus.c client_handler_bonus.c
 SERVER_BONUS_SRCS = $(addprefix $(BONUS_PATH), $(SERVER_BONUS_SRCS_NAME))
 CLIENT_BONUS_SRCS = $(addprefix $(BONUS_PATH), $(CLIENT_BONUS_SRCS_NAME))
 SERVER_BONUS_OBJS = $(SERVER_BONUS_SRCS:.c=.o)
