@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   colors.h                                           :+:      :+:    :+:   */
+/*   colors_bonus.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 20:31:40 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/18 20:32:59 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/20 17:04:43 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COLORS_H
-# define COLORS_H
+#ifndef COLORS_BONUS_H
+# define COLORS_BONUS_H
 
 # define RED      "\x1b[31m"
 # define GREEN    "\x1b[32m"
