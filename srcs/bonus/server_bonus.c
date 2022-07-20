@@ -6,14 +6,11 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/12 19:31:10 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/19 20:47:02 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/20 17:29:48 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk_bonus.h"
-#include "../../ft_printf/ft_printf.h"
-#include "../../ft_printf/libft/libft.h"
-#include <unistd.h>
 
 t_server_data	g_data;
 

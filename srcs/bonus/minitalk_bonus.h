@@ -6,7 +6,7 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 18:51:17 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/19 19:56:20 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/20 17:30:29 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 # define MINITALK_BONUS_H
 
 # include <signal.h>
-
-# define TRUE 1
-# define FALSE 0
+# include "../../ft_printf/ft_printf.h"
+# include "../../ft_printf/libft/libft.h"
+# include <unistd.h>
 
 typedef struct s_server_data
 {

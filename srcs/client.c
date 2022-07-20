@@ -6,13 +6,11 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 18:50:57 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/18 20:37:57 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/20 17:28:08 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-#include "../ft_printf/libft/libft.h"
-#include <unistd.h>
 #include "colors.h"
 
 static void	send_message_length(pid_t pid, unsigned int len)

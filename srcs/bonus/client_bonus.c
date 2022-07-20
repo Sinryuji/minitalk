@@ -6,14 +6,11 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 18:50:57 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/19 20:46:19 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/20 17:29:52 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk_bonus.h"
-#include "../../ft_printf/ft_printf.h"
-#include "../../ft_printf/libft/libft.h"
-#include <unistd.h>
 #include "colors_bonus.h"
 
 int	g_signal;
