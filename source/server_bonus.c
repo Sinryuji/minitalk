@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.c                                           :+:      :+:    :+:   */
+/*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/12 19:31:10 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/21 00:22:28 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/21 20:24:43 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk.h"
+#include "../include/minitalk_bonus.h"
 
 t_server_data	g_data;
 
@@ -32,7 +32,7 @@ static void	receive_connection_check(int sig, siginfo_t *info, void *context)
 		kill(info->si_pid, SIGUSR2);
 	}
 }
-#include <stdio.h>
+
 static void	print_message(int *len, pid_t pid)
 {
 	g_data.msg[*len] = '\0';
@@ -60,20 +60,20 @@ static void	receive_message(int sig, siginfo_t *info, void *context)
 	i++;
 	if (i == 8)
 	{
-		g_data.msg[len] = c;
+		g_data.msg[len++] = c;
 		c = 0;
 		i = 0;
-		len++;
 	}
 	if (g_data.len == len)
 		print_message(&len, info->si_pid);
+	usleep(50);
+	kill(info->si_pid, sig);
 }
 
 void	receive_message_length(int sig, siginfo_t *info, void *context)
 {
 	static int	i = 0;
 
-	(void)info;
 	(void)context;
 	g_data.len <<= 1;
 	if (sig == SIGUSR2)
@@ -87,6 +87,8 @@ void	receive_message_length(int sig, siginfo_t *info, void *context)
 		sigaction(SIGUSR1, &g_data.action, NULL);
 		sigaction(SIGUSR2, &g_data.action, NULL);
 	}
+	usleep(50);
+	kill(info->si_pid, sig);
 }
 
 int	main(void)

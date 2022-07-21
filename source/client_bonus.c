@@ -1,26 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 18:50:57 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/20 19:39:38 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/21 20:23:45 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk.h"
-#include "colors.h"
+#include "../include/minitalk_bonus.h"
+#include "../include/colors_bonus.h"
 
-static void	receive_connection_reply(int sig)
-{
-	if (sig == SIGUSR1)
-		return ;
-	if (sig == SIGUSR2)
-		ft_puterr(RED "Connection to server failed, \
-The server might be connecting with another client\n");
-}
+int	g_signal;
 
 static void	send_connection_check(pid_t pid)
 {
@@ -52,9 +45,16 @@ static void	send_message_length(pid_t pid, int len)
 	while (i--)
 	{
 		if (len >> i & 1)
+		{
 			kill(pid, SIGUSR2);
+			g_signal = SIGUSR2;
+		}
 		else
+		{
 			kill(pid, SIGUSR1);
+			g_signal = SIGUSR1;
+		}
+		pause();
 		usleep(50);
 	}
 }
@@ -71,9 +71,16 @@ static void	send_message(pid_t pid, char *str)
 		while (i--)
 		{
 			if (c >> i & 1)
+			{
 				kill(pid, SIGUSR2);
+				g_signal = SIGUSR2;
+			}
 			else
+			{
 				kill(pid, SIGUSR1);
+				g_signal = SIGUSR1;
+			}
+			pause();
 			usleep(50);
 		}
 	}
@@ -92,6 +99,8 @@ GREEN "Usage: ./client [Server PID] [Message]\n" RESET);
 	signal(SIGUSR1, receive_connection_reply);
 	signal(SIGUSR2, receive_connection_reply);
 	send_connection_check(pid);
+	signal(SIGUSR1, receive_message_reply);
+	signal(SIGUSR2, receive_message_reply);
 	send_message_length(pid, ft_strlen(argv[2]));
 	send_message(pid, argv[2]);
 	ft_printf(GREEN "Message send complete!\n" RESET);
