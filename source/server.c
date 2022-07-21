@@ -6,7 +6,7 @@
 /*   By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/12 19:31:10 by hyeongki          #+#    #+#             */
-/*   Updated: 2022/07/21 20:24:27 by hyeongki         ###   ########.fr       */
+/*   Updated: 2022/07/21 23:00:04 by hyeongki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	receive_connection_check(int sig, siginfo_t *info, void *context)
 		kill(info->si_pid, SIGUSR2);
 	}
 }
-#include <stdio.h>
+
 static void	print_message(int *len, pid_t pid)
 {
 	g_data.msg[*len] = '\0';
