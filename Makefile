@@ -6,7 +6,7 @@
 #    By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/21 18:12:33 by hyeongki          #+#    #+#              #
-#    Updated: 2022/07/20 19:46:03 by hyeongki         ###   ########.fr        #
+#    Updated: 2022/07/21 18:16:54 by hyeongki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ SERVER_BONUS_OBJS = $(SERVER_BONUS_SRCS:.c=.o)
 CLIENT_BONUS_OBJS = $(CLIENT_BONUS_SRCS:.c=.o)
 RM = rm -rf
 AR = ar rcs
+NAME = minitalk
 SERVER = server
 CLIENT = client
 FT_PRINTF_PATH = ./ft_printf
@@ -44,8 +45,9 @@ endif
 %.o : %.c
 	$(CC) $(CFALGS) -c $< -o $@
 
-all : $(SERVER) $(CLIENT)
-	$(info $(SERVER_OBJECTS))
+all : $(NAME)
+
+$(NAME) : $(SERVER) $(CLIENT)
 
 $(SERVER) : $(SERVER_OBJECTS)
 	make -C $(FT_PRINTF_PATH)
