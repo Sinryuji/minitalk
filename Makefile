@@ -6,7 +6,7 @@
 #    By: hyeongki <hyeongki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/21 18:12:33 by hyeongki          #+#    #+#              #
-#    Updated: 2022/09/09 21:08:15 by hyeongki         ###   ########.fr        #
+#    Updated: 2022/09/14 16:45:58 by hyeongki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,11 @@ CLIENT = client
 FT_PRINTF_PATH = ./lib/ft_printf/
 FT_PRINTF = libftprintf.a
 
+# Colors
+GREEN = \x1b[32m
+RED = \x1b[31m
+RESET = \x1b[0m
+
 ifdef BONUS_FLAG
 	SERVER_OBJECTS = $(SERVER_BONUS_OBJS)
 	CLIENT_OBJECTS = $(CLIENT_BONUS_OBJS)
@@ -43,30 +48,36 @@ else
 endif
 
 %.o : %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
+	@echo "$(GREEN).$(RESET)\c"
 
 all : $(NAME)
 
 $(NAME) : $(SERVER) $(CLIENT)
+	@echo "$@: $(GREEN)$@ was created$(RESET)"
 
 $(SERVER) : $(SERVER_OBJECTS)
-	make -C $(FT_PRINTF_PATH)
-	$(CC) $(CFLAGS) $^ $(FT_PRINTF_PATH)$(FT_PRINTF) -o $@
+	@make -C $(FT_PRINTF_PATH)
+	@$(CC) $(CFLAGS) $^ $(FT_PRINTF_PATH)$(FT_PRINTF) -o $@
+	@echo "$@: $(GREEN)$@ was created$(RESET)"
 
 $(CLIENT) : $(CLIENT_OBJECTS)
-	make -C $(FT_PRINTF_PATH)
-	$(CC) $(CFLAGS) $^ $(FT_PRINTF_PATH)$(FT_PRINTF) -o $@
+	@make -C $(FT_PRINTF_PATH)
+	@$(CC) $(CFLAGS) $^ $(FT_PRINTF_PATH)$(FT_PRINTF) -o $@
+	@echo "$@: $(GREEN)$@ was created$(RESET)"
 
 bonus :
-	$(MAKE) BONUS_FLAG=1 all
+	@$(MAKE) BONUS_FLAG=1 all
 
 clean : 
-	$(RM) $(SERVER_OBJS) $(CLIENT_OBJS) $(SERVER_BONUS_OBJS) $(CLIENT_BONUS_OBJS)
-	make -C $(FT_PRINTF_PATH) clean
+	@$(RM) $(SERVER_OBJS) $(CLIENT_OBJS) $(SERVER_BONUS_OBJS) $(CLIENT_BONUS_OBJS)
+	@make -C $(FT_PRINTF_PATH) clean
+	@echo "$(NAME): $(RED)object files were deleted$(RESET)"
 
 fclean : clean
-	$(RM) $(SERVER) $(CLIENT)
-	make -C $(FT_PRINTF_PATH) fclean
+	@$(RM) $(SERVER) $(CLIENT)
+	@make -C $(FT_PRINTF_PATH) fclean
+	@echo "$(NAME): $(RED)$(NAME) was deleted$(RESET)"
 
 re : fclean all
 
